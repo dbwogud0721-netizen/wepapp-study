@@ -282,14 +282,75 @@ function renderGenerating() {
     });
 }
 
-// ---- RESULT (생성 여부만 표시) ----
-function renderResult() {
+// ---- RESULT ----
+function evalRow(num, title, value) {
+  return `<div class="eval-row">
+      ${num ? `<div class="eval-num">${num}</div>` : ""}
+      <div class="eval-title">${escapeHtml(title)}</div>
+      <div class="eval-value">${escapeHtml(value)}</div>
+    </div>`;
+}
+
+function renderResult(tabIndex) {
   const problems = appData.problems;
-  const sub = document.getElementById("result-done-sub");
-  sub.textContent = (problems && problems.length)
-    ? `${problems.length}문항이 생성되었습니다.`
-    : "생성된 문제가 없습니다.";
-  document.getElementById("btn-result-again").onclick = () => showScreen("mode", {}, false);
+  if (!problems || !problems.length) {
+    document.getElementById("result-title").textContent = "생성된 문제가 없습니다.";
+    document.getElementById("result-tabs").innerHTML = "";
+    document.getElementById("result-problem").textContent = "";
+    document.getElementById("result-choices").innerHTML = "";
+    document.getElementById("result-eval").innerHTML = "";
+    return;
+  }
+  tabIndex = Math.max(0, Math.min(tabIndex, problems.length - 1));
+  const data = problems[tabIndex];
+
+  document.getElementById("result-title").textContent = `문제 번호 ${tabIndex + 1}`;
+
+  const predictPct = parseInt(data.predict_prob, 10);
+  document.getElementById("result-gauge").innerHTML = buildGaugeSVG(predictPct, COLORS.bright, 150);
+  document.getElementById("result-predict-desc").textContent =
+    `27년 수학능력의 예측율은 ${predictPct}%입니다`;
+
+  const tabBar = document.getElementById("result-tabs");
+  tabBar.innerHTML = "";
+  if (problems.length > 1) {
+    problems.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.className = "tab-btn" + (i === tabIndex ? " active" : "");
+      b.textContent = `문제 ${i + 1}`;
+      b.onclick = () => showScreen("result", { tabIndex: i }, false);
+      tabBar.appendChild(b);
+    });
+  }
+
+  // 출제 문제 본문은 노출하지 않고 "생성됨"만 표시
+  document.getElementById("result-problem").textContent = "생성됨";
+
+  const choicesEl = document.getElementById("result-choices");
+  choicesEl.innerHTML = "";
+  data.choices.forEach((c, i) => {
+    const row = document.createElement("div");
+    row.className = "choice-row";
+    row.innerHTML = `<span class="choice-num">${CIRCLED[i]}</span><span>${escapeHtml(c)}</span>`;
+    choicesEl.appendChild(row);
+  });
+
+  document.getElementById("result-eval").innerHTML = `
+    <h3>평가 항목</h3>
+    ${evalRow("①", "출제 영역", data.area)}
+    ${evalRow("②", "결합 영역", data.combo)}
+    ${evalRow("③", "사용공식의 영역", data.formula_area)}
+    ${evalRow("④", "사용된 공식", `${data.formula}\n\n미지수 개수: ${data.unknown_count}   조건분기 수: ${data.condition_branch}   차수: ${data.degree_count}`)}
+    ${evalRow("⑤", "난이도와 연산지수", `난이도 ${data.difficulty}단계 · 연산지수 ${data.op_index}`)}
+    ${evalRow("⑥", "기준 기출문제와의 유사도", data.similarity)}
+    ${evalRow("⑦", "출제의도", data.intent)}
+    <div class="eval-sep"></div>
+    <h3>27학년도 출제 경향 예측</h3>
+    ${evalRow("", "출제영역", data.trend_area)}
+    ${evalRow("", "결합영역 내용", data.trend_combo)}
+  `;
+
+  document.getElementById("btn-solve").onclick = () => showScreen("solution", { tabIndex }, true);
 }
 
 // ---- SOLUTION ----
