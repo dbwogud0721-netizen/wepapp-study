@@ -90,29 +90,12 @@
 
 <!-- ============ RESULT ============ -->
 <section class="screen" id="screen-result">
-  <div class="wrap">
-    <div class="result-header">
-      <h2 id="result-title" style="margin:0;"></h2>
-      <div class="tab-bar" id="result-tabs"></div>
-    </div>
-    <div class="result-columns">
-      <div class="paper">
-        <h3>문제</h3>
-        <div class="problem-box" id="result-problem"></div>
-        <h3>선택지</h3>
-        <div id="result-choices"></div>
-
-        <div class="predict-block">
-          <div class="gauge-wrap" id="result-gauge"></div>
-          <div class="predict-label">수능수학능력 예측율</div>
-          <div class="predict-desc" id="result-predict-desc"></div>
-        </div>
-
-        <div style="text-align:right;margin-top:20px;">
-          <button class="btn btn-primary" id="btn-solve">검산하여 풀이 진행</button>
-        </div>
-      </div>
-      <div class="card eval-card" id="result-eval"></div>
+  <div class="gen-center">
+    <div style="font-size:56px;color:var(--primary,#6657F4);line-height:1;">✔</div>
+    <div class="gen-title">생성됨</div>
+    <div class="gen-sub" id="result-done-sub"></div>
+    <div style="margin-top:24px;">
+      <button class="btn btn-primary" id="btn-result-again">다시 생성</button>
     </div>
   </div>
 </section>
