@@ -323,9 +323,16 @@ function renderResult(tabIndex) {
     });
   }
 
-  // 출제 문제 본문 / 선택지는 노출하지 않고 "생성됨"만 표시
+  // 문제 본문은 미노출("생성됨"), 선택지는 번호(①~⑤)만 유지하고 보기 내용은 미노출
   document.getElementById("result-problem").textContent = "생성됨";
-  document.getElementById("result-choices").innerHTML = `<div class="choice-row">생성됨</div>`;
+  const choicesEl = document.getElementById("result-choices");
+  choicesEl.innerHTML = "";
+  data.choices.forEach((_, i) => {
+    const row = document.createElement("div");
+    row.className = "choice-row";
+    row.innerHTML = `<span class="choice-num">${CIRCLED[i]}</span><span>생성됨</span>`;
+    choicesEl.appendChild(row);
+  });
 
   document.getElementById("result-eval").innerHTML = `
     <h3>평가 항목</h3>
