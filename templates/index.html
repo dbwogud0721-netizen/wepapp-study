@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>PICKX Engine</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="navbar">
+  <button class="navbtn" id="btn-back">← 이전</button>
+  <button class="navbtn" id="btn-home">⌂ 홈</button>
+  <div class="brand">PICKX Engine</div>
+</div>
+
+<!-- ============ HOME ============ -->
+<section class="screen active" id="screen-home">
+  <div class="home-header">
+    <div class="home-logo">
+      <div class="mark">X</div>
+      <div class="name">PICKX Engine</div>
+    </div>
+    <button class="btn-outline" id="btn-manual">사용자 설명서</button>
+  </div>
+  <div class="wrap">
+    <div class="home-hero-text">
+      <div class="caption">DEMO SCENARIO</div>
+      <div class="home-title">PICK<span class="x">X</span> Engine</div>
+      <div class="home-desc">Pick Engine은 기출문제 데이터를 학습해 출제 영역과 난이도를 분석하고,
+출제 가능성이 높은 문항을 예측·생성하는 AI 분석 엔진입니다.
+출제 예측률, 기출 유사도, 문항 구조 분석까지 하나의 대시보드에서 확인할 수 있습니다.</div>
+
+      <div class="card cta-card" id="cta-card">
+        <div class="cta-icon">✦</div>
+        <div>
+          <h3>FredictX Engine</h3>
+          <p>예측 엔진을 시작합니다.</p>
+        </div>
+        <div class="cta-arrow">→</div>
+      </div>
+    </div>
+    <div class="home-illustration">
+      <img src="{{ url_for('static', filename='images/home_illustration.png') }}" alt="AI 분석 대시보드 일러스트">
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODE SELECT ============ -->
+<section class="screen" id="screen-mode">
+  <div class="wrap">
+    <div class="mode-header">
+      <span style="color:var(--primary);font-size:22px;">◆</span>
+      <h2>Pick Engine Picker</h2>
+    </div>
+    <div class="mode-sub">무작위 추천 모드 · 출석 / 수학 / 영어 / 사람 4종</div>
+
+    <div class="mode-title">
+      <div class="l1">Fredict X</div>
+      <div class="l2">Engine</div>
+    </div>
+
+    <div class="mode-grid" id="mode-grid"></div>
+  </div>
+</section>
+
+<!-- ============ MATH WIZARD ============ -->
+<section class="screen" id="screen-wizard">
+  <div class="wrap">
+    <div class="wizard-layout">
+      <div class="step-nav" id="step-nav"></div>
+      <div class="card question-card" id="question-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GENERATING ============ -->
+<section class="screen" id="screen-generating">
+  <div class="gen-center">
+    <svg class="spinner" viewBox="0 0 120 120">
+      <circle class="track" cx="60" cy="60" r="52"></circle>
+      <circle class="arc" cx="60" cy="60" r="52" stroke-dasharray="80 246.5"></circle>
+    </svg>
+    <div class="gen-title">문제를 생성하고 있습니다</div>
+    <div class="gen-sub">출제 영역과 기출 데이터를 분석하고 있습니다.</div>
+    <div class="gen-progress"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
+    <div class="gen-status" id="gen-status"></div>
+  </div>
+</section>
+
+<!-- ============ RESULT ============ -->
+<section class="screen" id="screen-result">
+  <div class="wrap">
+    <div class="result-header">
+      <h2 id="result-title" style="margin:0;"></h2>
+      <div class="tab-bar" id="result-tabs"></div>
+    </div>
+    <div class="result-columns">
+      <div class="paper">
+        <h3>문제</h3>
+        <div class="problem-box" id="result-problem"></div>
+        <h3>선택지</h3>
+        <div id="result-choices"></div>
+
+        <div class="predict-block">
+          <div class="gauge-wrap" id="result-gauge"></div>
+          <div class="predict-label">수능수학능력 예측율</div>
+          <div class="predict-desc" id="result-predict-desc"></div>
+        </div>
+
+        <div style="text-align:right;margin-top:20px;">
+          <button class="btn btn-primary" id="btn-solve">검산하여 풀이 진행</button>
+        </div>
+      </div>
+      <div class="card eval-card" id="result-eval"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUTION ============ -->
+<section class="screen" id="screen-solution">
+  <div class="wrap">
+    <div class="sol-header">
+      <h2 id="sol-title"></h2>
+      <div class="sol-status">● 풀이 진행 중</div>
+    </div>
+    <div class="result-columns">
+      <div class="card" style="padding:24px;">
+        <h3 style="margin:0;">문제 풀이</h3>
+        <div class="sol-box" id="sol-text"></div>
+        <div class="answer-card" id="sol-answer"></div>
+      </div>
+      <div class="card sol-right">
+        <h3>기출과의 유사율</h3>
+        <div class="gauge-wrap" id="sol-gauge" style="margin:0 auto;"></div>
+        <div class="sol-note" id="sol-note" style="margin-left:auto;margin-right:auto;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="manual-modal">
+  <div class="modal-box">
+    <h3>사용자 설명서</h3>
+    <p>PICKX Engine은 기출 데이터를 분석하여 다가오는 수능 문제 출제 경향을 예측하고, 예측 결과를 바탕으로 모의 문항과 상세 풀이를 생성하는 데모용 AI 분석 엔진입니다.
+
+1. Pick Engine Picker에서 분석할 과목 모드를 선택합니다. (현재 데모에서는 수학 모드만 활성화되어 있습니다.)
+2. 출제 여부, 문항 수, 난이도 범위를 순서대로 설정합니다.
+3. 엔진이 출제 영역, 난이도, 기출 유사도, 출제 예측률을 계산하여 문항별 분석 결과를 제공합니다.
+4. 예측률 확인 후 검산을 진행하면 상세 풀이와 기출 유사율을 확인할 수 있습니다.</p>
+    <div style="text-align:right;margin-top:16px;">
+      <button class="btn btn-primary" id="btn-manual-close">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
