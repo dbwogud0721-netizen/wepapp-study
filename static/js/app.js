@@ -26,7 +26,7 @@ const MODES = [
   { key: "korean", icon: "가", name: "국어", en: "KOREAN", enabled: false },
   { key: "math", icon: "ƒ(x)", name: "수학", en: "MATH", enabled: true },
   { key: "english", icon: "AB", name: "영어", en: "ENGLISH", enabled: false },
-  { key: "people", icon: "◍", name: "사람", en: "PEOPLE", enabled: false },
+  { key: "inquiry", icon: "◍", name: "탐구", en: "INQUIRY", enabled: false },
 ];
 
 const GENERATING_MESSAGES = [
