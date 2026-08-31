@@ -29,12 +29,15 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
+  font-weight: 600;               /* 전체 글자를 기본보다 진하게 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
   overflow-x: hidden;             /* 어떤 요소가 흘러나가도 가로 스크롤은 절대 안 생기게 */
   width: 100%;
 }
 
-button, input { font-family: var(--font); }
+button, input { font-family: var(--font); font-weight: 600; }
 img { max-width: 100%; height: auto; display: block; }
 
 /* 길게 이어지는 수식/영문 토큰이 있어도 가로로 뚫고 나가지 않게 기본값을 안전하게 */
@@ -299,6 +302,10 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--card); border: 1px solid var(--border); text-align: center;
 }
 .predict-block .gauge-wrap { margin: 0 auto; }
+.predict-headline {
+  font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: var(--text);
+  line-height: 1.4; margin-bottom: 16px;
+}
 .predict-label { color: var(--muted); font-weight: 700; font-size: 12px; margin-top: 10px; }
 .predict-desc { color: var(--text2); font-weight: 700; font-size: 14px; margin-top: 4px; }
 

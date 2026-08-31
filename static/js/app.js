@@ -23,7 +23,7 @@ const STEP_INFO = [
 ];
 
 const MODES = [
-  { key: "attendance", icon: "▦", name: "출석", en: "ATTENDANCE", enabled: false },
+  { key: "korean", icon: "가", name: "국어", en: "KOREAN", enabled: false },
   { key: "math", icon: "ƒ(x)", name: "수학", en: "MATH", enabled: true },
   { key: "english", icon: "AB", name: "영어", en: "ENGLISH", enabled: false },
   { key: "people", icon: "◍", name: "사람", en: "PEOPLE", enabled: false },
@@ -168,7 +168,8 @@ function renderWizard(step) {
   const btns = document.getElementById("q-btns");
 
   if (step === 1) {
-    body.innerHTML = `<h2>27학년도 수능 수학 문제를 출제 할까요?</h2>`;
+    body.innerHTML = `<h2>27학년도 예측되는 수능 문제를 출제할까요?</h2>
+      <p style="color:var(--text2);margin-top:12px;">출제 예상율도 함께 표시하겠습니다.</p>`;
     btns.innerHTML = `<button class="btn btn-secondary" id="w-no">아니오</button><button class="btn btn-primary" id="w-yes">예</button>`;
     document.getElementById("w-no").onclick = () => showScreen("mode", {}, false);
     document.getElementById("w-yes").onclick = () => showScreen("wizard", { step: 2 }, false);
@@ -307,6 +308,8 @@ function renderResult(tabIndex) {
   document.getElementById("result-title").textContent = `문제 번호 ${tabIndex + 1}`;
 
   const predictPct = parseInt(data.predict_prob, 10);
+  document.getElementById("result-predict-headline").textContent =
+    `이 문제의 출제 예상은 ${predictPct}% 입니다`;
   document.getElementById("result-gauge").innerHTML = buildGaugeSVG(predictPct, COLORS.bright, 150);
   document.getElementById("result-predict-desc").textContent =
     `27년 수학능력의 예측율은 ${predictPct}%입니다`;
